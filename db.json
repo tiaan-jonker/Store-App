@@ -1,0 +1,25 @@
+{
+  "events": [
+    {
+      "id": 1,
+      "title": "Great Rugby",
+      "description": "Rugby for all ages",
+      "price": 20,
+      "date": "20 June 2022"
+    },
+    {
+      "id": 2,
+      "title": "Great Football",
+      "description": "Football for all ages",
+      "price": 22,
+      "date": "22 June 2022"
+    },
+    {
+      "title": "A",
+      "description": "B",
+      "price": 40,
+      "date": "12 June 2022",
+      "id": 3
+    }
+  ]
+}
