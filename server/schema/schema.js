@@ -1,4 +1,5 @@
 const Event = require('../models/Event')
+const User = require('../models/User')
 
 const {
   GraphQLObjectType,
@@ -23,6 +24,15 @@ const EventType = new GraphQLObjectType({
   }),
 })
 
+const UserType = new GraphQLObjectType({
+  name: 'User',
+  fields: () => ({
+    id: { type: GraphQLID },
+    email: { type: GraphQLNonNull(GraphQLString) },
+    password: { type: GraphQLNonNull(GraphQLString) },
+  }),
+})
+
 const mutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
@@ -43,6 +53,22 @@ const mutation = new GraphQLObjectType({
         })
 
         return event.save()
+      },
+    },
+
+    createUser: {
+      type: UserType,
+      args: {
+        email: { type: GraphQLString },
+        password: { type: GraphQLString },
+      },
+      resolve(parent, { email, password }) {
+        const user = new User({
+          email,
+          password,
+        })
+
+        return user.save()
       },
     },
   },
