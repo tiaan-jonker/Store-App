@@ -1,4 +1,5 @@
-const axios = require('axios')
+const Event = require('../models/Event')
+
 const {
   GraphQLObjectType,
   GraphQLID,
@@ -15,10 +16,10 @@ const EventType = new GraphQLObjectType({
   name: 'Event',
   fields: () => ({
     id: { type: GraphQLID },
-    title: { type: GraphQLString },
-    description: { type: GraphQLString },
-    price: { type: GraphQLFloat },
-    date: { type: GraphQLString },
+    title: { type: GraphQLNonNull(GraphQLString) },
+    description: { type: GraphQLNonNull(GraphQLString) },
+    price: { type: GraphQLNonNull(GraphQLFloat) },
+    date: { type: GraphQLNonNull(GraphQLString) },
   }),
 })
 
@@ -34,14 +35,14 @@ const mutation = new GraphQLObjectType({
         date: { type: GraphQLString },
       },
       resolve(parent, { title, description, price, date }) {
-        return axios
-          .post(`http://localhost:3000/events`, {
-            title,
-            description,
-            price,
-            date,
-          })
-          .then((res) => res.data)
+        const event = new Event({
+          title,
+          description,
+          price,
+          date: new Date(date),
+        })
+
+        return event.save()
       },
     },
   },
@@ -50,13 +51,17 @@ const mutation = new GraphQLObjectType({
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
+    events: {
+      type: new GraphQLList(EventType),
+      resolve(parent, args) {
+        return Event.find()
+      },
+    },
     event: {
       type: EventType,
       args: { id: { type: GraphQLID } },
       resolve(parent, { id }) {
-        return axios
-          .get(`http://localhost:3000/events/${id}`)
-          .then((res) => res.data)
+        return Event.findById(id)
       },
     },
   },
