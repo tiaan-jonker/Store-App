@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose
+const PasswordManager = require('../utils/PasswordHash')
 
 const UserSchema = new Schema({
   email: {
