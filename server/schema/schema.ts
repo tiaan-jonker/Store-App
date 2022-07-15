@@ -1,5 +1,6 @@
-const Event = require('../models/Event')
-const User = require('../models/User')
+import { User } from '../models/User'
+import { Profile } from '../models/Profile'
+import { Event } from '../models/Event'
 
 const {
   GraphQLObjectType,
@@ -44,12 +45,12 @@ const mutation = new GraphQLObjectType({
         price: { type: GraphQLFloat },
         date: { type: GraphQLString },
       },
-      resolve(parent, { title, description, price, date }) {
+      resolve(parent: any, args: any) {
         const event = new Event({
-          title,
-          description,
-          price,
-          date: new Date(date),
+          title: args.title,
+          description: args.description,
+          price: args.price,
+          date: args.date,
         })
 
         return event.save()
@@ -62,10 +63,10 @@ const mutation = new GraphQLObjectType({
         email: { type: GraphQLString },
         password: { type: GraphQLString },
       },
-      resolve(parent, { email, password }) {
+      resolve(parent: any, args: any) {
         const user = new User({
-          email,
-          password,
+          email: args.email,
+          password: args.password,
         })
 
         return user.save()
@@ -79,15 +80,15 @@ const RootQuery = new GraphQLObjectType({
   fields: {
     events: {
       type: new GraphQLList(EventType),
-      resolve(parent, args) {
+      resolve(parent: any, args: any) {
         return Event.find()
       },
     },
     event: {
       type: EventType,
       args: { id: { type: GraphQLID } },
-      resolve(parent, { id }) {
-        return Event.findById(id)
+      resolve(parent: any, args: any) {
+        return Event.findById(args.id)
       },
     },
   },

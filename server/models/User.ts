@@ -1,6 +1,6 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose'
 const { Schema } = mongoose
-const PasswordManager = require('../utils/PasswordHash')
+import { PasswordManager } from '../utils/PasswordHash'
 
 const UserSchema = new Schema({
   email: {
@@ -14,4 +14,6 @@ const UserSchema = new Schema({
   },
 })
 
-module.exports = mongoose.model('User', UserSchema)
+const User = mongoose.model('User', UserSchema)
+
+export { User }
